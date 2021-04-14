@@ -2,11 +2,15 @@ package sample;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.awt.*;
 import java.time.Duration;
@@ -25,6 +29,7 @@ public class Main extends Application {
     int height = 275;
     // 提示信息
     String message = "马上三点了！";
+    Task<String> task = null;
 
     @Override
     public void start(Stage primaryStage) {
@@ -35,9 +40,47 @@ public class Main extends Application {
         FlowPane pane = new FlowPane();
         // 内边距
         pane.setPadding(new Insets(50, 50, 50, 50));
-        Label label = new Label(message);
+        // 信息和时间设置
+        javafx.scene.control.TextField notification = new javafx.scene.control.TextField(message);
+        javafx.scene.control.TextField hourText = new javafx.scene.control.TextField();
+        javafx.scene.control.TextField minuteText = new javafx.scene.control.TextField();
+        javafx.scene.control.Button sm = new javafx.scene.control.Button("保存设置");
+
+        GridPane grid = new GridPane();
+        grid.setVgap(4);
+        grid.setHgap(10);
+        grid.setPadding(new Insets(5, 5, 5, 5));
+        grid.add(new Label("提示内容: "), 0, 0);
+        grid.add(notification, 1, 0);
+        grid.add(new Label("时: "), 0, 1);
+        grid.add(hourText, 1, 1);
+        grid.add(new Label("分: "), 0, 2);
+        grid.add(minuteText, 1, 2);
+        grid.add(sm, 0, 3, 2,1);
+        sm.setOnAction((ActionEvent e) -> {
+            message = notification.getText().trim();
+            if (!hourText.getText().trim().equals("") && !minuteText.getText().trim().equals("")) {
+                int hourInt = Integer.parseInt(hourText.getText().trim());
+                int minuteInt = Integer.parseInt(minuteText.getText().trim());
+                if (hourInt < 24 && hourInt >= 0) {
+                    hour = hourInt;
+                } else {
+                    new Alert(Alert.AlertType.NONE, "输错了憨批", new ButtonType[]{ButtonType.CLOSE}).show();
+                }
+                if (minuteInt < 60 && hourInt >= 0) {
+                    minute = minuteInt;
+                } else {
+                    new Alert(Alert.AlertType.NONE, "输错了憨批", new ButtonType[]{ButtonType.CLOSE}).show();
+                }
+            }
+            if (task != null) {
+                task.cancel();
+                taskNow(primaryStage);
+                task.run();
+            }
+        });
         //组件加入面板
-        pane.getChildren().add(label);
+        pane.getChildren().add(grid);
         primaryStage.setTitle("");
         //设置窗口的图标.
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("123.png")));
@@ -48,7 +91,12 @@ public class Main extends Application {
         MinWindow.getInstance().listen(primaryStage);
         MinWindow.getInstance().hide(primaryStage);
         //创建一个对话框提醒线程
-        Task<String> task = new Task<String>() {
+        taskNow(primaryStage);
+        task.run();
+    }
+
+    private void taskNow(Stage primaryStage) {
+        task = new Task<String>() {
             @Override
             protected String call() {
                 LocalDateTime now = LocalDateTime.now();
@@ -61,9 +109,7 @@ public class Main extends Application {
                 return null;
             }
         };
-        task.run();
     }
-
 
     public static void main(String[] args) {
         launch(args);
