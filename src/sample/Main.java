@@ -75,9 +75,9 @@ public class Main extends Application {
             }
             if (task != null) {
                 task.cancel();
-                taskNow(primaryStage);
-                task.run();
             }
+            taskNow(primaryStage);
+            task.run();
         });
         //组件加入面板
         pane.getChildren().add(grid);
