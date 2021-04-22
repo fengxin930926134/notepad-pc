@@ -5,18 +5,43 @@ import sample.api.Operation;
 import sample.utils.DialogUtils;
 import sample.utils.DomXmlUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OperationImpl implements Operation {
 
     @Override
-    public void createNote(String title) {
+    public Note createNote(String title) {
+        Note note = new Note();
         try {
-            Note note = new Note();
             note.setTitle(title);
             DomXmlUtils.appendXML(note);
         } catch (Exception e) {
             e.printStackTrace();
             DialogUtils.warn(getExceptionMsg(e));
         }
+        return note;
+    }
+
+    @Override
+    public void updateNote(Note note) {
+        try {
+            DomXmlUtils.updateNote(note);
+        } catch (Exception e) {
+            e.printStackTrace();
+            DialogUtils.warn(getExceptionMsg(e));
+        }
+    }
+
+    @Override
+    public List<Note> initNotes() {
+        try {
+            return DomXmlUtils.readNotes();
+        } catch (Exception e) {
+            e.printStackTrace();
+            DialogUtils.warn(getExceptionMsg(e));
+        }
+        return new ArrayList<>();
     }
 
     /**

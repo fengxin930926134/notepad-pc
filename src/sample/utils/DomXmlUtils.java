@@ -55,22 +55,28 @@ public class DomXmlUtils {
 				// 节点中包含元素节点和文本节点
 				Node nodes = childNodes.item(i);
 				if (nodes.getNodeType() == Node.ELEMENT_NODE) {
+					boolean is = false;
 					// 获取笔记的属性的值
 					for (Node node = nodes.getFirstChild(); node != null; node = node.getNextSibling()) {
 						// TEXT_NODE 说明该节点是文本节点
 						// ELEMENT_NODE 说明该节点是个元素节点
 						if (node.getNodeType() == Node.ELEMENT_NODE) {
 							String textContent = null;
-							switch (node.getNodeName()) {
-								case "id":textContent = note.getId();break;
-								case "title":textContent = note.getTitle();break;
-								case "content":textContent = note.getContent();break;
-								case "remindTime":textContent = note.getRemindTime().toString();break;
-								case "remindDate":textContent = note.getRemindDate().toString();break;
-								case "cycle":textContent = note.getCycle().toString();break;
+							if (node.getNodeName().equals("id")) {
+								is = node.getTextContent().equals(note.getId());
 							}
-							if (textContent != null) {
-								node.setTextContent(textContent);
+							// 是这个对象
+							if (is) {
+								switch (node.getNodeName()) {
+									case "title":textContent = note.getTitle();break;
+									case "content":textContent = note.getContent();break;
+									case "remindTime":textContent = note.getRemindTime() == null? null:note.getRemindTime().toString();break;
+									case "remindDate":textContent = note.getRemindDate() == null? null:note.getRemindDate().toString();break;
+									case "cycle":textContent = note.getCycle() == null? null:note.getCycle().toString();break;
+								}
+								if (textContent != null) {
+									node.setTextContent(textContent);
+								}
 							}
 						}
 					}
@@ -141,13 +147,15 @@ public class DomXmlUtils {
 						// ELEMENT_NODE 说明该节点是个元素节点
 						if (node.getNodeType() == Node.ELEMENT_NODE) {
 							String textContent = node.getTextContent();
-							switch (node.getNodeName()) {
-								case "id":note.setId(textContent);break;
-								case "title":note.setTitle(textContent);break;
-								case "content":note.setContent(textContent);break;
-								case "remindTime":note.setRemindTime(LocalTime.parse(textContent));break;
-								case "remindDate":note.setRemindDate(LocalDate.parse(textContent));break;
-								case "cycle":note.setCycle(Integer.parseInt(textContent));break;
+							if (textContent != null && !textContent.equals("")) {
+								switch (node.getNodeName()) {
+									case "id":note.setId(textContent);break;
+									case "title":note.setTitle(textContent);break;
+									case "content":note.setContent(textContent);break;
+									case "remindTime":note.setRemindTime(LocalTime.parse(textContent));break;
+									case "remindDate":note.setRemindDate(LocalDate.parse(textContent));break;
+									case "cycle":note.setCycle(Integer.parseInt(textContent));break;
+								}
 							}
 						}
 					}
