@@ -1,4 +1,4 @@
-package sample;
+package sample.api;
 
 /**
  * 操作接口

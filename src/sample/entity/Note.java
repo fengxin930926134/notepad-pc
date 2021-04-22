@@ -1,4 +1,4 @@
-package sample;
+package sample.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -90,10 +90,12 @@ public class Note {
     @Override
     public String toString() {
         return "Note{" +
-                "title='" + title + '\'' +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", remindTime=" + remindTime +
                 ", remindDate=" + remindDate +
+                ", remindTime=" + remindTime +
+                ", cycle=" + cycle +
                 '}';
     }
 }

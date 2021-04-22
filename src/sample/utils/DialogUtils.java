@@ -15,7 +15,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.Main;
-import sample.Operation;
+import sample.api.Operation;
 
 import java.awt.*;
 
@@ -66,6 +66,7 @@ public class DialogUtils {
             // 组件
             javafx.scene.control.TextField input = new javafx.scene.control.TextField();
             javafx.scene.control.Button save = new javafx.scene.control.Button("保存");
+            input.setPromptText("笔记标题");
             // 清除焦点
             input.focusedProperty().addListener((observable,  oldValue,  newValue) -> {
                 if(newValue && firstTime.get()){

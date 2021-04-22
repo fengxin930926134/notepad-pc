@@ -18,7 +18,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import sample.Note;
+import sample.entity.Note;
 
 public class DomXmlUtils {
 
