@@ -2,6 +2,7 @@ package sample;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -9,6 +10,7 @@ import javafx.scene.web.HTMLEditor;
 import sample.api.impl.OperationImpl;
 import sample.entity.Note;
 import sample.utils.DialogUtils;
+
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -48,6 +50,15 @@ public class Controller extends OperationImpl implements Initializable {
         }
     }
 
+    @FXML
+    public void setNotice() {
+        if (noteMap.size() > 0) {
+            DialogUtils.setRemind(this, noteList.getItems());
+        } else {
+            DialogUtils.warn("还未添加笔记！");
+        }
+    }
+
     @Override
     public Note createNote(String title) {
         Note note = super.createNote(title);
@@ -63,10 +74,10 @@ public class Controller extends OperationImpl implements Initializable {
         noteList.setItems(FXCollections.observableArrayList(noteMap.values()));
         // 点击事件
         noteList.getSelectionModel().selectedItemProperty().addListener(
-                (ObservableValue<? extends Note> ov, Note old_val,
-                 Note new_val) -> {
-                    selectId = new_val.getId();
-                    content.setHtmlText(new_val.getContent());
+                (ObservableValue<? extends Note> ov, Note oldVal,
+                 Note newVal) -> {
+                    selectId = newVal.getId();
+                    content.setHtmlText(newVal.getContent());
                 });
     }
 }

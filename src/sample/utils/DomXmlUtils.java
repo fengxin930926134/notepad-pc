@@ -70,7 +70,7 @@ public class DomXmlUtils {
             // ELEMENT_NODE 说明该节点是个元素节点
             if (node.getNodeType() == Node.ELEMENT_NODE) {
               String textContent = null;
-              if (node.getNodeName().equals("id")) {
+              if ("id".equals(node.getNodeName())) {
                 is = node.getTextContent().equals(note.getId());
               }
               // 是这个对象
@@ -102,7 +102,7 @@ public class DomXmlUtils {
         }
       }
       // 保存
-      saveXML(document);
+      saveXml(document);
     }
   }
 
@@ -138,7 +138,7 @@ public class DomXmlUtils {
         }
       }
       // 保存
-      saveXML(document);
+      saveXml(document);
     }
   }
 
@@ -166,7 +166,7 @@ public class DomXmlUtils {
             // ELEMENT_NODE 说明该节点是个元素节点
             if (node.getNodeType() == Node.ELEMENT_NODE) {
               String textContent = node.getTextContent();
-              if (textContent != null && !textContent.equals("")) {
+              if (textContent != null && !"".equals(textContent)) {
                 switch (node.getNodeName()) {
                   case "id":
                     note.setId(textContent);
@@ -204,7 +204,7 @@ public class DomXmlUtils {
    * @param t   对象
    * @param <T> 泛型
    */
-  public static <T> void appendXML(T t) throws Exception {
+  public static <T> void appendXml(T t) throws Exception {
     // 获取xml文档
     Document document = getDocument();
     // root节点
@@ -222,7 +222,7 @@ public class DomXmlUtils {
     }
     root.appendChild(element);
     // 保存
-    saveXML(document);
+    saveXml(document);
   }
 
   /**
@@ -265,7 +265,7 @@ public class DomXmlUtils {
    *
    * @param document Document
    */
-  private static void saveXML(Document document) throws Exception {
+  private static void saveXml(Document document) throws Exception {
     // 创建TransformerFactory对象
     TransformerFactory tff = TransformerFactory.newInstance();
     // 创建 Transformer对象

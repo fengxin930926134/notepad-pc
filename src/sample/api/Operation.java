@@ -1,7 +1,6 @@
 package sample.api;
 
 import sample.entity.Note;
-
 import java.util.List;
 
 /**
@@ -12,6 +11,7 @@ public interface Operation {
     /**
      * 创建一个只有标题的笔记
      * @param title 标题
+     * @return Note
      */
     Note createNote(String title);
 
@@ -23,6 +23,7 @@ public interface Operation {
 
     /**
      * 读取xml中的笔记
+     * @return list
      */
     List<Note> initNotes();
 }
