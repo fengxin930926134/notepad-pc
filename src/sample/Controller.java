@@ -15,21 +15,28 @@ import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * @author Japoul
+ */
 public class Controller extends OperationImpl implements Initializable {
 
     @FXML
     public ListView<Note> noteList;
     @FXML
     public HTMLEditor content;
-    // map缓存 k:id
+    /**
+     * map缓存 k:id
+     */
     private Map<String, Note> noteMap;
-    // 当前选中item
+    /**
+     * 当前选中item
+     */
     private String selectId = null;
 
     @FXML
     public void newNote() {
         // 弹出创建笔记弹窗
-        DialogUtils.CreateNote(this);
+        DialogUtils.createNote(this);
     }
 
     @FXML

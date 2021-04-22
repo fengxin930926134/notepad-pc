@@ -5,8 +5,13 @@ package sample.utils;
  */
 public class Constant {
 
-    public static String APP_NAME = "记得做";
+    /**
+     * app name
+     */
+    public static final String APP_NAME = "记得做";
 
-    // 图标路径
-    public static String ICO_PATH = "";
+    /**
+     * 图标路径
+     */
+    public static final String ICO_PATH = "";
 }

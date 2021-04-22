@@ -44,7 +44,7 @@ public class DialogUtils {
      * 创建笔记弹窗
      * @param operation 操作
      */
-    public static void CreateNote(Operation operation) {
+    public static void createNote(Operation operation) {
         new Create(operation).show();
     }
 
@@ -57,7 +57,7 @@ public class DialogUtils {
         int width = 260;
         int height = 80;
 
-        public Create(Operation operation) {
+        Create(Operation operation) {
             // Variable to store the focus on stage load
             final BooleanProperty firstTime = new SimpleBooleanProperty(true);
             FlowPane pane = new FlowPane();
@@ -83,7 +83,7 @@ public class DialogUtils {
             GridPane grid = new GridPane();
             grid.setVgap(4);
             grid.setHgap(10);
-            grid.setPadding(new javafx.geometry.Insets(5, 5, 5, 5));
+            grid.setPadding(new Insets(5, 5, 5, 5));
             grid.add(input, 0, 0);
             grid.add(save, 1, 0);
 
@@ -107,14 +107,14 @@ public class DialogUtils {
         // 提示字体大小
         int fontSize = 28;
 
-        public Tips(String message) {
+        Tips(String message) {
             // 获取屏幕大小
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             double screenWidth = screenSize.getWidth();
             double screenHeight = screenSize.getHeight();
             FlowPane pane = new FlowPane();
             // 内边距
-            pane.setPadding(new javafx.geometry.Insets(10, 10, 10, 10));
+            pane.setPadding(new Insets(10, 10, 10, 10));
             // 提示信息
             Text t = new Text();
             t.setCache(true);

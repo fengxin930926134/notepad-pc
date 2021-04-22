@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 import sample.utils.Constant;
 import sample.utils.MinWindow;
 
+/**
+ * @author Japoul
+ */
 public class Main extends Application {
 
     @Override
