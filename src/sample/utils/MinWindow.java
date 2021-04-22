@@ -1,4 +1,4 @@
-package sample;
+package sample.utils;
 
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -36,7 +36,7 @@ public class MinWindow {
         //菜单项(退出)
         exitItem = new MenuItem("EXT");
         //此处不能选择ico格式的图片,要使用16*16的png格式的图片
-        URL url = MinWindow.class.getResource("123.png");
+        URL url = MinWindow.class.getResource(Constant.ICO_PATH);
         Image image = Toolkit.getDefaultToolkit().getImage(url);
         //系统托盘图标
         trayIcon = new TrayIcon(image);
