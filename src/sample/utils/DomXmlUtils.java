@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -211,6 +212,9 @@ public class DomXmlUtils {
                                 }
                             }
                         }
+                    }
+                    if (StringUtils.isBlank(note.getContent())) {
+                        note.setContent("");
                     }
                     noteList.add(note);
                 }

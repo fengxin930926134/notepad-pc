@@ -1,4 +1,4 @@
-package sample.utils;
+package sample;
 
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -13,13 +13,15 @@ import java.net.URL;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import sample.utils.Constant;
+import sample.utils.TimerTaskManager;
 
 /**
  * 自定义系统托盘(单例模式)
  */
-public class MinWindowManager {
+public class MinWindow {
 
-    private static MinWindowManager instance;
+    private static MinWindow instance;
     private static final MenuItem SHOW_ITEM;
     private static final MenuItem EXIT_ITEM;
     private static final TrayIcon TRAY_ICON;
@@ -36,7 +38,7 @@ public class MinWindowManager {
         //菜单项(退出)
         EXIT_ITEM = new MenuItem("EXT");
         //此处不能选择ico格式的图片,要使用16*16的png格式的图片
-        URL url = MinWindowManager.class.getResource(Constant.ICO_PATH);
+        URL url = MinWindow.class.getResource(Constant.ICO_PATH);
         Image image = Toolkit.getDefaultToolkit().getImage(url);
         //系统托盘图标
         TRAY_ICON = new TrayIcon(image);
@@ -49,14 +51,14 @@ public class MinWindowManager {
         };
     }
 
-    public static MinWindowManager getInstance() {
+    public static MinWindow getInstance() {
         if (instance == null) {
-            instance = new MinWindowManager();
+            instance = new MinWindow();
         }
         return instance;
     }
 
-    private MinWindowManager() {
+    private MinWindow() {
         try {
             //检查系统是否支持托盘
             if (!SystemTray.isSupported()) {

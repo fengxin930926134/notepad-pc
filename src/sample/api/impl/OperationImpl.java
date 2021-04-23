@@ -19,7 +19,6 @@ public class OperationImpl implements Operation {
         Note note = new Note();
         try {
             note.setTitle(title);
-            note.setContent("");
             DomXmlUtils.appendXml(note);
         } catch (Exception e) {
             e.printStackTrace();

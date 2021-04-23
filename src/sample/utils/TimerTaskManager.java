@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import sample.entity.Note;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Hashtable;
@@ -47,8 +48,7 @@ public class TimerTaskManager {
     public boolean startRemindTaskToToday(Note note) {
         LocalDateTime now = LocalDateTime.now();
         LocalTime remindTime = note.getRemindTime();
-        LocalDateTime reminderDateTime = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(),
-                remindTime.getHour(), remindTime.getMinute(), remindTime.getNano());
+        LocalDateTime reminderDateTime = LocalDateTime.of(LocalDate.now(), remindTime);
         // 计算当前到指定时间还有多少毫秒
         if (now.compareTo(reminderDateTime) <= 0) {
             Duration between = Duration.between(now, reminderDateTime);

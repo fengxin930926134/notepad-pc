@@ -9,7 +9,7 @@ import javafx.scene.web.HTMLEditor;
 import sample.api.impl.OperationImpl;
 import sample.entity.Note;
 import sample.utils.DialogUtils;
-import sample.utils.MinWindowManager;
+
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -86,7 +86,7 @@ public class Controller extends OperationImpl implements Initializable {
 
     @FXML
     public void exit() {
-        MinWindowManager.getInstance().exit();
+        MinWindow.getInstance().exit();
     }
 
     @FXML

@@ -13,5 +13,5 @@ public class Constant {
     /**
      * 图标路径
      */
-    public static final String ICO_PATH = "";
+    public static final String ICO_PATH = "ico.png";
 }

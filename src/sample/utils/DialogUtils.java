@@ -38,6 +38,7 @@ public class DialogUtils {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, content);
         alert.setTitle("");
         alert.setHeaderText(title);
+        alert.initOwner(Main.stage);
         alert.show();
     }
 
@@ -47,7 +48,10 @@ public class DialogUtils {
      * @param content 警告内容
      */
     public static void warn(String content) {
-        new Alert(Alert.AlertType.WARNING, content, new ButtonType[]{ButtonType.CLOSE}).show();
+        Alert alert = new Alert(Alert.AlertType.WARNING, content, ButtonType.CLOSE);
+        alert.setTitle("");
+        alert.initOwner(Main.stage);
+        alert.show();
     }
 
     /**
@@ -128,7 +132,7 @@ public class DialogUtils {
                 if (VerifyUtils.verify(time.getText(), VerifyUtils.IS_TIME)) {
                     note.setRemindTime(LocalTime.parse(time.getText()));
                 } else {
-                    DialogUtils.warn("提醒时间不能为空！");
+                    DialogUtils.warn("提醒时间格式不正确！");
                     return;
                 }
                 if (cycle.getText() != null && VerifyUtils.verify(cycle.getText(), VerifyUtils.IS_CYCLE)) {
@@ -153,6 +157,8 @@ public class DialogUtils {
             // 设置窗口的图标.
             getIcons().add(new Image(Main.class.getResourceAsStream(Constant.ICO_PATH)));
             setScene(new Scene(pane, width, height));
+            // 可拉动大小
+            setResizable(false);
         }
     }
 
@@ -201,6 +207,8 @@ public class DialogUtils {
             // 设置窗口的图标.
             getIcons().add(new Image(Main.class.getResourceAsStream(Constant.ICO_PATH)));
             setScene(new Scene(pane, width, height));
+            // 可拉动大小
+            setResizable(false);
         }
     }
 
@@ -210,8 +218,8 @@ public class DialogUtils {
     private static class Tips extends Stage {
 
         // 提示的窗口高宽度
-        int width = 360;
-        int height = 270;
+        int width = 370;
+        int height = 260;
 
         Tips(String message) {
             // 获取屏幕大小
@@ -230,7 +238,7 @@ public class DialogUtils {
             getIcons().add(new Image(Main.class.getResourceAsStream(Constant.ICO_PATH)));
             setScene(new Scene(pane, width, height));
             setX(screenWidth - width - 10);
-            setY(screenHeight - height - 33);
+            setY(screenHeight - height - 35);
             // 保持最前
             setAlwaysOnTop(true);
             // 可拉动大小
