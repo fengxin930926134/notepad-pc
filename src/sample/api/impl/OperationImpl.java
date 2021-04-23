@@ -4,7 +4,7 @@ import sample.entity.Note;
 import sample.api.Operation;
 import sample.utils.DialogUtils;
 import sample.utils.DomXmlUtils;
-import sample.utils.TaskUtils;
+import sample.utils.TimerTaskManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -19,6 +19,7 @@ public class OperationImpl implements Operation {
         Note note = new Note();
         try {
             note.setTitle(title);
+            note.setContent("");
             DomXmlUtils.appendXml(note);
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,9 +54,9 @@ public class OperationImpl implements Operation {
         // 更改保存到数据库
         updateNote(note);
         // 判断通知时间是否是今天
-        if (note.getRemindDate().compareTo(LocalDate.now()) == 0) {
+        if (note.getRemindDate() != null && note.getRemindDate().compareTo(LocalDate.now()) == 0) {
             // 开始提醒任务
-            return TaskUtils.startRemindTaskToToday(note);
+            return TimerTaskManager.getInstance().startRemindTaskToToday(note);
         }
         return false;
     }
@@ -66,8 +67,9 @@ public class OperationImpl implements Operation {
             List<Note> notes = DomXmlUtils.readNotes();
             for (Note note: notes) {
                 // 启动今天且未过期的任务
-                if (note.getRemindDate().compareTo(LocalDate.now()) == 0 && note.getRemindTime().compareTo(LocalTime.now()) >= 0) {
-                    if (!TaskUtils.startRemindTaskToToday(note)) {
+                if (note.getRemindDate() != null && note.getRemindDate().compareTo(LocalDate.now()) == 0 &&
+                        note.getRemindTime().compareTo(LocalTime.now()) >= 0) {
+                    if (!TimerTaskManager.getInstance().startRemindTaskToToday(note)) {
                         System.out.println("启动定时任务失败！");
                     }
                 }

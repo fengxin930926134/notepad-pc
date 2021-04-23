@@ -1,5 +1,6 @@
 package sample.utils;
 
+import com.sun.glass.ui.Screen;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -11,15 +12,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.StringEscapeUtils;
 import sample.Main;
 import sample.api.Operation;
 import sample.entity.Note;
-import java.awt.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -28,6 +27,19 @@ import java.util.List;
  * 弹窗工具类
  */
 public class DialogUtils {
+
+    /**
+     * 信息框
+     *
+     * @param title   标题
+     * @param content 内容
+     */
+    public static void message(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, content);
+        alert.setTitle("");
+        alert.setHeaderText(title);
+        alert.show();
+    }
 
     /**
      * 警告
@@ -45,7 +57,7 @@ public class DialogUtils {
      */
     public static void notice(String content) {
         new Tips(content).show();
-        System.out.println("通知执行完成...");
+        System.out.println("执行通知完成...");
     }
 
     /**
@@ -198,34 +210,31 @@ public class DialogUtils {
     private static class Tips extends Stage {
 
         // 提示的窗口高宽度
-        int width = 300;
-        int height = 275;
-        // 提示字体大小
-        int fontSize = 28;
+        int width = 360;
+        int height = 270;
 
         Tips(String message) {
             // 获取屏幕大小
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            double screenWidth = screenSize.getWidth();
-            double screenHeight = screenSize.getHeight();
+            Screen screen = (Screen) com.sun.javafx.tk.Toolkit.getToolkit().getPrimaryScreen();
+            double screenWidth = screen.getWidth();
+            double screenHeight = screen.getHeight();
             FlowPane pane = new FlowPane();
-            // 内边距
-            pane.setPadding(new Insets(10, 10, 10, 10));
             // 提示信息
-            Text t = new Text();
-            t.setCache(true);
-            t.setX(10.0);
-            t.setY(70.0);
-            t.setFill(Color.CHOCOLATE);
-            t.setText(message);
-            t.setFont(Font.font(null, FontWeight.BOLD, fontSize));
-            //组件加入面板
-            pane.getChildren().add(t);
+            WebView webView = new WebView();
+            webView.getEngine().loadContent(StringEscapeUtils.unescapeXml(message));
+            webView.setMaxWidth(width);
+            webView.setMaxHeight(height);
+            // 组件加入面板
+            pane.getChildren().add(webView);
             setTitle(Constant.APP_NAME);
             getIcons().add(new Image(Main.class.getResourceAsStream(Constant.ICO_PATH)));
             setScene(new Scene(pane, width, height));
-            setX(screenWidth - width);
-            setY(screenHeight - height);
+            setX(screenWidth - width - 10);
+            setY(screenHeight - height - 33);
+            // 保持最前
+            setAlwaysOnTop(true);
+            // 可拉动大小
+            setResizable(false);
         }
     }
 }

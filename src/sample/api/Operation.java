@@ -10,6 +10,7 @@ public interface Operation {
 
     /**
      * 创建一个只有标题的笔记
+     *
      * @param title 标题
      * @return Note
      */
@@ -17,24 +18,28 @@ public interface Operation {
 
     /**
      * 更新笔记
+     *
      * @param note 新
      */
     void updateNote(Note note);
 
     /**
      * 读取xml中的笔记
+     *
      * @return list
      */
     List<Note> initNotes();
 
     /**
      * 设置通知
+     *
      * @param note 通知内容
+     * @return boolean
      */
     boolean setNotice(Note note);
 
     /**
-     * 读取今天的定时通知
+     * 读取今天的定时通知并启动
      */
     void readNoticeByToday();
 }

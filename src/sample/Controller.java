@@ -9,6 +9,7 @@ import javafx.scene.web.HTMLEditor;
 import sample.api.impl.OperationImpl;
 import sample.entity.Note;
 import sample.utils.DialogUtils;
+import sample.utils.MinWindowManager;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -81,5 +82,15 @@ public class Controller extends OperationImpl implements Initializable {
                 });
         // 读取通知
         readNoticeByToday();
+    }
+
+    @FXML
+    public void exit() {
+        MinWindowManager.getInstance().exit();
+    }
+
+    @FXML
+    public void about() {
+        DialogUtils.message("关于","QQ:930926134");
     }
 }
