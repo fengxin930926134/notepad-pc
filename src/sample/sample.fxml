@@ -34,7 +34,7 @@
             </rowConstraints>
             <children>
                 <ListView fx:id="noteList" prefHeight="200.0" prefWidth="200.0" GridPane.rowSpan="2" />
-                <HTMLEditor fx:id="content" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="200.0" prefWidth="535.0" GridPane.columnIndex="1" />
+                <HTMLEditor fx:id="content" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;未选择笔记&lt;/body&gt;&lt;/html&gt;" prefHeight="200.0" prefWidth="535.0" GridPane.columnIndex="1" />
                 <Button mnemonicParsing="false" onAction="#saveNote" text="保存" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />

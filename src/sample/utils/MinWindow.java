@@ -16,8 +16,6 @@ import javafx.stage.Stage;
 
 /**
  * 自定义系统托盘(单例模式)
- *
- * @author Japoul
  */
 public class MinWindow {
 

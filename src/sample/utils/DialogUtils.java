@@ -21,6 +21,7 @@ import sample.api.Operation;
 import sample.entity.Note;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -44,6 +45,7 @@ public class DialogUtils {
      */
     public static void notice(String content) {
         new Tips(content).show();
+        System.out.println("通知执行完成...");
     }
 
     /**
@@ -108,11 +110,27 @@ public class DialogUtils {
                 if (cb.getValue() == null) {
                     DialogUtils.warn("请选择需要提醒的笔记！");
                 }
-                System.out.println(cb.getValue());
-                System.out.println(checkInDatePicker.getValue());
-                System.out.println(time.getText());
-                System.out.println(cycle.getText());
-
+                // 读取设置数据
+                Note note = cb.getValue();
+                note.setRemindDate(checkInDatePicker.getValue());
+                if (VerifyUtils.verify(time.getText(), VerifyUtils.IS_TIME)) {
+                    note.setRemindTime(LocalTime.parse(time.getText()));
+                } else {
+                    DialogUtils.warn("提醒时间不能为空！");
+                    return;
+                }
+                if (cycle.getText() != null && VerifyUtils.verify(cycle.getText(), VerifyUtils.IS_CYCLE)) {
+                    note.setCycle(Integer.parseInt(cycle.getText()));
+                } else {
+                    note.setCycle(null);
+                }
+                // 设置通知
+                if (!operation.setNotice(note)) {
+                    return;
+                }
+                // 关闭窗口
+                close();
+                System.out.println("设置通知完成...");
             });
             // 合并
             GridPane.setRowSpan(sbm, 2);

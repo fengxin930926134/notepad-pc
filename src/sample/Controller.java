@@ -2,7 +2,6 @@ package sample;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -10,7 +9,6 @@ import javafx.scene.web.HTMLEditor;
 import sample.api.impl.OperationImpl;
 import sample.entity.Note;
 import sample.utils.DialogUtils;
-
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -18,7 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * @author Japoul
+ * 控制层
  */
 public class Controller extends OperationImpl implements Initializable {
 
@@ -47,6 +45,8 @@ public class Controller extends OperationImpl implements Initializable {
             Note note = noteMap.get(selectId);
             note.setContent(content.getHtmlText());
             updateNote(note);
+        } else {
+            DialogUtils.warn("未选择笔记！");
         }
     }
 
@@ -79,5 +79,7 @@ public class Controller extends OperationImpl implements Initializable {
                     selectId = newVal.getId();
                     content.setHtmlText(newVal.getContent());
                 });
+        // 读取通知
+        readNoticeByToday();
     }
 }

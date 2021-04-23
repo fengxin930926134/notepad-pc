@@ -26,4 +26,15 @@ public interface Operation {
      * @return list
      */
     List<Note> initNotes();
+
+    /**
+     * 设置通知
+     * @param note 通知内容
+     */
+    boolean setNotice(Note note);
+
+    /**
+     * 读取今天的定时通知
+     */
+    void readNoticeByToday();
 }
