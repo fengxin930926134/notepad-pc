@@ -63,6 +63,7 @@ public class Controller extends OperationImpl implements Initializable {
     @Override
     public Note createNote(String title) {
         Note note = super.createNote(title);
+        noteMap.put(note.getId(), note);
         noteList.getItems().add(0, note);
         return note;
     }
