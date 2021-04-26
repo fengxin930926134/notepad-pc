@@ -141,7 +141,11 @@ public class DialogUtils {
                 }
                 // 设置通知
                 if (!operation.setNotice(note)) {
+                    DialogUtils.warn("设置通知失败！请检查参数是否正确！");
                     return;
+                } else {
+                    // 更改保存到数据库
+                    operation.updateNote(note);
                 }
                 // 关闭窗口
                 close();

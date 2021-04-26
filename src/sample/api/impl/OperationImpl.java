@@ -51,12 +51,15 @@ public class OperationImpl implements Operation {
 
     @Override
     public boolean setNotice(Note note) {
-        // 更改保存到数据库
-        updateNote(note);
         // 判断通知时间是否是今天
-        if (note.getRemindDate() != null && note.getRemindDate().compareTo(LocalDate.now()) == 0) {
-            // 开始提醒任务
-            return TimerTaskManager.getInstance().startRemindTaskToToday(note);
+        if (note.getRemindDate() != null) {
+            if (note.getRemindDate().compareTo(LocalDate.now()) == 0) {
+                // 开始提醒任务
+                return TimerTaskManager.getInstance().startRemindTaskToToday(note);
+            } else {
+                // 提醒日期必须大于当前日期
+                return note.getRemindDate().compareTo(LocalDate.now()) > 0;
+            }
         }
         return false;
     }
