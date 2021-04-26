@@ -18,7 +18,6 @@ public class Main extends Application {
         primaryStage.setTitle(Constant.APP_NAME);
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream(Constant.ICO_PATH)));
         primaryStage.setScene(new Scene(root, 768, 400));
-        primaryStage.show();
         MinWindow.getInstance().listen(primaryStage);
         stage = primaryStage;
     }

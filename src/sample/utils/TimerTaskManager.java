@@ -1,6 +1,7 @@
 package sample.utils;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import sample.entity.Note;
 
 import java.time.Duration;
@@ -52,17 +53,24 @@ public class TimerTaskManager {
         // 计算当前到指定时间还有多少毫秒
         if (now.compareTo(reminderDateTime) <= 0) {
             Duration between = Duration.between(now, reminderDateTime);
-            ScheduledFuture<?> schedule = ThreadPoolManager.getInstance().schedule(() -> {
-                System.out.println("执行定时提醒...");
-                // 提醒
-                Platform.runLater(() -> DialogUtils.notice(note.getContent()));
-                // 修改下次提醒周期
-                DomXmlUtils.setNextNoticeTime(note);
-            }, between.toMillis(), TimeUnit.MILLISECONDS);
+            final ScheduledFuture<?>[] schedule = new ScheduledFuture<?>[1];
+            new Task<String>() {
+                @Override
+                protected String call() {
+                    schedule[0] = ThreadPoolManager.getInstance().schedule(() -> {
+                        System.out.println("执行定时提醒...");
+                        // 提醒
+                        Platform.runLater(() -> DialogUtils.notice(note.getContent()));
+                        // 修改下次提醒周期
+                        DomXmlUtils.setNextNoticeTime(note);
+                    }, between.toMillis(), TimeUnit.MILLISECONDS);
+                    return null;
+                }
+            }.run();
             System.out.println("定时任务添加完成...还需时间:" + between.toMillis());
             // 停止可能存在的任务
             stopTaskById(note.getId());
-            taskCacheMap.put(note.getId(), schedule);
+            taskCacheMap.put(note.getId(), schedule[0]);
             return true;
         } else {
             // 过期

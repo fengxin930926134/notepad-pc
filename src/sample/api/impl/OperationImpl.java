@@ -65,18 +65,46 @@ public class OperationImpl implements Operation {
     public void readNoticeByToday() {
         try {
             List<Note> notes = DomXmlUtils.readNotes();
+            List<Note> updates = new ArrayList<>();
             for (Note note: notes) {
-                // 启动今天且未过期的任务
-                if (note.getRemindDate() != null && note.getRemindDate().compareTo(LocalDate.now()) == 0 &&
-                        note.getRemindTime().compareTo(LocalTime.now()) >= 0) {
-                    if (!TimerTaskManager.getInstance().startRemindTaskToToday(note)) {
-                        System.out.println("启动定时任务失败！");
+                if (note.getRemindDate() != null) {
+                    // 设置周期不为空且日期过期的到今日或之后
+                    if (note.getRemindDate().compareTo(LocalDate.now()) < 0 && note.getCycle() != null && note.getCycle() != 0) {
+                        note.setRemindDate(getCycleDate(note.getCycle(), note.getRemindDate()));
+                        updates.add(note);
+                    }
+                    // 启动今天且未过期的任务
+                    if (note.getRemindDate().compareTo(LocalDate.now()) == 0 &&
+                            note.getRemindTime().compareTo(LocalTime.now()) >= 0) {
+                        if (!TimerTaskManager.getInstance().startRemindTaskToToday(note)) {
+                            System.out.println("启动定时任务失败！");
+                        }
                     }
                 }
+            }
+            // 更新周期日期
+            for (Note note:updates) {
+                updateNote(note);
             }
         } catch (Exception e) {
             e.printStackTrace();
             DialogUtils.warn(getExceptionMsg(e));
+        }
+    }
+
+    /**
+     * 获取周期日期
+     * @param cycle 周期
+     * @param date 已有日期
+     * @return 需要设置的日期
+     */
+    private static LocalDate getCycleDate(Integer cycle, LocalDate date) {
+        if (date.compareTo(LocalDate.now()) < 0 && cycle > 0) {
+            LocalDate localDate = date.plusDays(cycle);
+            // 递归增加周期 直到满足条件
+            return getCycleDate(cycle, localDate);
+        } else {
+            return date;
         }
     }
 
