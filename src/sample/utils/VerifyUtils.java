@@ -9,9 +9,13 @@ import java.util.regex.Pattern;
  */
 public class VerifyUtils {
 
-    /** 是时间 */
+    /**
+     * 是时间
+     */
     public static final String IS_TIME = "^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
-    /** 是周期 */
+    /**
+     * 是周期
+     */
     public static final String IS_CYCLE = "^[0-9]{1,}$";
 
     public static boolean verify(String content, String regular) {

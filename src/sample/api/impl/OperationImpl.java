@@ -5,6 +5,7 @@ import sample.api.Operation;
 import sample.utils.DialogUtils;
 import sample.utils.DomXmlUtils;
 import sample.utils.TimerTaskManager;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -69,7 +70,7 @@ public class OperationImpl implements Operation {
         try {
             List<Note> notes = DomXmlUtils.readNotes();
             List<Note> updates = new ArrayList<>();
-            for (Note note: notes) {
+            for (Note note : notes) {
                 if (note.getRemindDate() != null) {
                     // 设置周期不为空且日期过期的到今日或之后
                     if (note.getRemindDate().compareTo(LocalDate.now()) < 0 && note.getCycle() != null && note.getCycle() != 0) {
@@ -86,7 +87,7 @@ public class OperationImpl implements Operation {
                 }
             }
             // 更新周期日期
-            for (Note note:updates) {
+            for (Note note : updates) {
                 updateNote(note);
             }
         } catch (Exception e) {
@@ -95,10 +96,27 @@ public class OperationImpl implements Operation {
         }
     }
 
+    @Override
+    public void deleteNote(String id) {
+        try {
+            closeNotice(id);
+            DomXmlUtils.deleteNoteById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            DialogUtils.warn(getExceptionMsg(e));
+        }
+    }
+
+    @Override
+    public void closeNotice(String id) {
+        TimerTaskManager.getInstance().stopTaskById(id);
+    }
+
     /**
      * 获取周期日期
+     *
      * @param cycle 周期
-     * @param date 已有日期
+     * @param date  已有日期
      * @return 需要设置的日期
      */
     private static LocalDate getCycleDate(Integer cycle, LocalDate date) {
@@ -113,10 +131,11 @@ public class OperationImpl implements Operation {
 
     /**
      * 获取异常的提示信息
+     *
      * @param e Exception
      * @return msg
      */
     private String getExceptionMsg(Exception e) {
-        return e.getMessage() == null? e.getClass().getName(): e.getMessage();
+        return e.getMessage() == null ? e.getClass().getName() : e.getMessage();
     }
 }

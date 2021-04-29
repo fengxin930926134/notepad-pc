@@ -28,12 +28,16 @@ public class ThreadPoolManager {
                 Executors.newScheduledThreadPool(5, r -> new Thread(r, "fx-Thread"));
     }
 
-    /**私有化构造方法*/
-    private ThreadPoolManager(){
+    /**
+     * 私有化构造方法
+     */
+    private ThreadPoolManager() {
     }
 
-    /**提供一个共有的可以返回类对象的方法*/
-    public static ScheduledExecutorService getInstance(){
+    /**
+     * 提供一个共有的可以返回类对象的方法
+     */
+    public static ScheduledExecutorService getInstance() {
         return Inner.INSTANCE;
     }
 

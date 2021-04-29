@@ -70,7 +70,8 @@ public class TimerTaskManager {
             System.out.println("定时任务添加完成...还需时间:" + between.toMillis());
             // 停止可能存在的任务
             stopTaskById(note.getId());
-            taskCacheMap.put(note.getId(), schedule[0]);
+            // 保存任务
+            setTask(note.getId(), schedule[0]);
             return true;
         } else {
             // 过期
@@ -80,15 +81,29 @@ public class TimerTaskManager {
     }
 
     /**
+     * 设置任务
+     *
+     * @param key      String
+     * @param schedule ScheduledFuture<?>
+     */
+    public void setTask(String key, ScheduledFuture<?> schedule) {
+        if (taskCacheMap == null) {
+            taskCacheMap = new Hashtable<>();
+        }
+        taskCacheMap.put(key, schedule);
+    }
+
+    /**
      * 停止定时任务 根据id
      *
      * @param id note id
      */
     public void stopTaskById(String id) {
-        if (taskCacheMap.containsKey(id)) {
+        if (taskCacheMap != null && id != null && taskCacheMap.containsKey(id)) {
             ScheduledFuture<?> scheduledFuture = taskCacheMap.get(id);
             if (scheduledFuture != null) {
                 scheduledFuture.cancel(true);
+                System.out.println("通知停止...");
             }
         }
     }
@@ -97,8 +112,10 @@ public class TimerTaskManager {
      * 停止所有任务
      */
     public void stopAll() {
-        for (ScheduledFuture<?> scheduledFuture: taskCacheMap.values()) {
-            scheduledFuture.cancel(true);
+        if (taskCacheMap != null) {
+            for (ScheduledFuture<?> scheduledFuture : taskCacheMap.values()) {
+                scheduledFuture.cancel(true);
+            }
         }
     }
 }

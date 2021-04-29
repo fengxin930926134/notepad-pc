@@ -1,6 +1,7 @@
 package sample.api;
 
 import sample.entity.Note;
+
 import java.util.List;
 
 /**
@@ -42,4 +43,18 @@ public interface Operation {
      * 读取今天的定时通知并启动
      */
     void readNoticeByToday();
+
+    /**
+     * 删除笔记
+     *
+     * @param id 标识
+     */
+    void deleteNote(String id);
+
+    /**
+     * 关闭通知
+     *
+     * @param id 标识
+     */
+    void closeNotice(String id);
 }
