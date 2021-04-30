@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -55,21 +56,42 @@ public class DomXmlUtils {
     private static final String CONFIG_CHILD_NODE = "note";
 
     /**
-     * 设置通知的下个周期提醒
+     * 根据笔记id删除笔记
      *
-     * @param note Note
+     * @param ids ids
      */
-    public static void setNextNoticeTime(Note note) {
-        if (note.getCycle() != null) {
-            // 修改提醒时间
-            note.setRemindDate(note.getRemindDate().plusDays(note.getCycle()));
-            try {
-                updateNote(note);
-            } catch (Exception e) {
-                e.printStackTrace();
-                DialogUtils.warn("设置周期提醒失败！");
+    public static List<Note> findAllById(Collection<String> ids) throws Exception {
+        List<Note> notes = new ArrayList<>();
+        // 获取xml文档
+        Document document = getDocument();
+        NodeList childNodes = document.getDocumentElement().getChildNodes();
+        if (childNodes != null) {
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                // 节点中包含元素节点和文本节点
+                Node nodes = childNodes.item(i);
+                if (nodes.getNodeType() == Node.ELEMENT_NODE) {
+                    Node findNode = null;
+                    // 获取笔记的属性的值
+                    for (Node node = nodes.getFirstChild(); node != null; node = node.getNextSibling()) {
+                        // TEXT_NODE 说明该节点是文本节点
+                        // ELEMENT_NODE 说明该节点是个元素节点
+                        if (node.getNodeType() == Node.ELEMENT_NODE
+                                && "id".equals(node.getNodeName())
+                                && ids.contains(node.getTextContent())) {
+                            findNode = node.getParentNode();
+                        }
+                    }
+                    // 获取返回节点
+                    if (findNode != null) {
+                        Note note = getNote(childNodes.item(i));
+                        if (note != null) {
+                            notes.add(note);
+                        }
+                    }
+                }
             }
         }
+        return notes;
     }
 
     /**
@@ -180,43 +202,8 @@ public class DomXmlUtils {
         if (notes != null) {
             for (int i = 0; i < notes.getLength(); i++) {
                 // 节点中包含元素节点和文本节点
-                Node nodes = notes.item(i);
-                if (nodes.getNodeType() == Node.ELEMENT_NODE) {
-                    Note note = new Note();
-                    // 获取笔记的属性的值
-                    for (Node node = nodes.getFirstChild(); node != null; node = node.getNextSibling()) {
-                        // TEXT_NODE 说明该节点是文本节点
-                        // ELEMENT_NODE 说明该节点是个元素节点
-                        if (node.getNodeType() == Node.ELEMENT_NODE) {
-                            String textContent = node.getTextContent();
-                            if (textContent != null && !"".equals(textContent)) {
-                                switch (node.getNodeName()) {
-                                    case "id":
-                                        note.setId(textContent);
-                                        break;
-                                    case "title":
-                                        note.setTitle(textContent);
-                                        break;
-                                    case "content":
-                                        note.setContent(textContent);
-                                        break;
-                                    case "remindTime":
-                                        note.setRemindTime(LocalTime.parse(textContent));
-                                        break;
-                                    case "remindDate":
-                                        note.setRemindDate(LocalDate.parse(textContent));
-                                        break;
-                                    case "cycle":
-                                        note.setCycle(Integer.parseInt(textContent));
-                                        break;
-                                    default:
-                                }
-                            }
-                        }
-                    }
-                    if (StringUtils.isBlank(note.getContent())) {
-                        note.setContent("");
-                    }
+                Note note = getNote(notes.item(i));
+                if (note != null) {
                     noteList.add(note);
                 }
             }
@@ -249,6 +236,55 @@ public class DomXmlUtils {
         root.appendChild(element);
         // 保存
         saveXml(document);
+    }
+
+    /**
+     * 通过节点获取笔记
+     *
+     * @param nodes Node
+     * @return Note
+     */
+    private static Note getNote(Node nodes) {
+        // 节点中包含元素节点和文本节点
+        if (nodes.getNodeType() == Node.ELEMENT_NODE) {
+            Note note = new Note();
+            // 获取笔记的属性的值
+            for (Node node = nodes.getFirstChild(); node != null; node = node.getNextSibling()) {
+                // TEXT_NODE 说明该节点是文本节点
+                // ELEMENT_NODE 说明该节点是个元素节点
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    String textContent = node.getTextContent();
+                    if (textContent != null && !"".equals(textContent)) {
+                        switch (node.getNodeName()) {
+                            case "id":
+                                note.setId(textContent);
+                                break;
+                            case "title":
+                                note.setTitle(textContent);
+                                break;
+                            case "content":
+                                note.setContent(textContent);
+                                break;
+                            case "remindTime":
+                                note.setRemindTime(LocalTime.parse(textContent));
+                                break;
+                            case "remindDate":
+                                note.setRemindDate(LocalDate.parse(textContent));
+                                break;
+                            case "cycle":
+                                note.setCycle(Integer.parseInt(textContent));
+                                break;
+                            default:
+                        }
+                    }
+                }
+            }
+            if (StringUtils.isBlank(note.getContent())) {
+                note.setContent("");
+            }
+            return note;
+        }
+        return null;
     }
 
     /**

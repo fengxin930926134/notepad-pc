@@ -9,7 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -62,7 +64,7 @@ public class TimerTaskManager {
                         // 提醒
                         Platform.runLater(() -> DialogUtils.notice(note.getContent()));
                         // 修改下次提醒周期
-                        DomXmlUtils.setNextNoticeTime(note);
+                        setNextNoticeTime(note);
                     }, between.toMillis(), TimeUnit.MILLISECONDS);
                     return null;
                 }
@@ -78,6 +80,33 @@ public class TimerTaskManager {
             DialogUtils.warn("已经过了提醒时间！");
         }
         return false;
+    }
+
+    /**
+     * 设置通知的下个周期提醒
+     *
+     * @param note Note
+     */
+    public void setNextNoticeTime(Note note) {
+        if (note.getCycle() != null) {
+            // 修改提醒时间
+            note.setRemindDate(note.getRemindDate().plusDays(note.getCycle()));
+            try {
+                DomXmlUtils.updateNote(note);
+            } catch (Exception e) {
+                e.printStackTrace();
+                DialogUtils.warn("设置周期提醒失败！");
+            }
+        }
+    }
+
+    /**
+     * 获取所有任务笔记id
+     *
+     * @return ids
+     */
+    public Set<String> getAllTaskId() {
+        return taskCacheMap.keySet();
     }
 
     /**

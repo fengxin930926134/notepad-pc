@@ -118,4 +118,9 @@ public class Controller extends OperationImpl implements Initializable {
     public void about() {
         DialogUtils.message("关于", "QQ:930926134");
     }
+
+    @FXML
+    public void taskRunList() {
+        DialogUtils.taskRun(this);
+    }
 }

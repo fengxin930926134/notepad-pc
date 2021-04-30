@@ -4,6 +4,7 @@ import com.sun.glass.ui.Screen;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -64,6 +66,13 @@ public class DialogUtils {
     }
 
     /**
+     * 任务运行列表
+     */
+    public static void taskRun(Operation operation) {
+        new TaskRun(operation).show();
+    }
+
+    /**
      * 创建笔记弹窗
      *
      * @param operation 操作
@@ -79,6 +88,43 @@ public class DialogUtils {
      */
     public static void setRemind(Operation operation, List<Note> noteList) {
         new SetRemind(operation, noteList).show();
+    }
+
+    /**
+     * 设置提醒弹窗
+     */
+    private static class TaskRun extends Stage {
+
+        int width = 285;
+        int height = 220;
+
+        TaskRun(Operation operation) {
+            ObservableList<Note> data = FXCollections.observableArrayList(operation.getTaskRunList());
+            ListView<Note> listView = new ListView<>(data);
+            listView.setCellFactory((ListView<Note> l) -> new CustomCell());
+            StackPane root = new StackPane();
+            root.getChildren().add(listView);
+            setTitle("定时任务");
+            // 设置窗口的图标.
+            getIcons().add(new Image(Main.class.getResourceAsStream(Constant.ICO_PATH)));
+            setScene(new Scene(root, width, height));
+            // 可拉动大小
+            setResizable(false);
+        }
+    }
+
+    /**
+     * 自定义CustomCell
+     */
+    private static class CustomCell extends ListCell<Note> {
+
+        @Override
+        public void updateItem(Note item, boolean empty) {
+            super.updateItem(item, false);
+            if (item != null) {
+                setText("提醒笔记:" + item.getTitle() + "    提醒时间:" + item.getRemindTime());
+            }
+        }
     }
 
     /**

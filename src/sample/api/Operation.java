@@ -57,4 +57,11 @@ public interface Operation {
      * @param id 标识
      */
     void closeNotice(String id);
+
+    /**
+     * 获取正在运行任务的列表
+     *
+     * @return list
+     */
+    List<Note> getTaskRunList();
 }

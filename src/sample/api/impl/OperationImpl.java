@@ -112,6 +112,18 @@ public class OperationImpl implements Operation {
         TimerTaskManager.getInstance().stopTaskById(id);
     }
 
+    @Override
+    public List<Note> getTaskRunList() {
+        try {
+            Set<String> allTaskId = TimerTaskManager.getInstance().getAllTaskId();
+            return DomXmlUtils.findAllById(allTaskId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            DialogUtils.warn(getExceptionMsg(e));
+        }
+        return new ArrayList<>();
+    }
+
     /**
      * 获取周期日期
      *
